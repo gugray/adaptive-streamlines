@@ -5,7 +5,7 @@ async function buildBundle() {
   const esbuild = require("esbuild");
 
   esbuild.build({
-    entryPoints: ["src/index.js"],
+    entryPoints: ["src/bundle.js"],
     outfile: "dist/adaptive-streamlines.js",
     bundle: true,
     sourcemap: true,
