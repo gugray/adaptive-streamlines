@@ -16,6 +16,10 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
+      - name: Install packages
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
       - name: Build
         run: node build.js
       - name: Create release
