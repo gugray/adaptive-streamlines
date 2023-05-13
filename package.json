@@ -1,6 +1,6 @@
 {
   "name": "adaptive-streamlines",
-  "version": "0.0.3",
+  "version": "0.0.0",
   "description": "Variable-density streamlines calculator",
   "main": "src/index.js",
   "scripts": {
