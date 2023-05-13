@@ -23,13 +23,17 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: install
-      - name: Build
-        run: node build.js
-      - name: Create release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/adaptive-streamlines.js
-      - name: NPM publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - name: GitHub Tag Name example
+        run: |
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+#       - name: Build
+#         run: node build.js
+#       - name: Create release
+#         uses: softprops/action-gh-release@v1
+#         with:
+#           files: dist/adaptive-streamlines.js
+#       - name: NPM publish
+#         run: npm publish
+#         env:
+#           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
