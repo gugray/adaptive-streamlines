@@ -1,7 +1,7 @@
 name: Build, create release and publish to npmjs
 
 on:
-  push
+  push:
     tags:
       - "v*.*.*"
 
