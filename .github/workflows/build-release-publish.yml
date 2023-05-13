@@ -23,12 +23,10 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: install
-      - name: GitHub Tag Name example
-        run: |
-          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
-#       - name: Build
-#         run: node build.js
+      - name: Set package version from tag
+        run: node build-setver.js ${{github.ref_name}}
+      - name: Create release bundle
+        run: node build-bundle.js --ver ${{github.ref_name}}
 #       - name: Create release
 #         uses: softprops/action-gh-release@v1
 #         with:
