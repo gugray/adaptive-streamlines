@@ -27,7 +27,7 @@ function createStreamlineGenerator({
                                      minPointsPerLine = 5,
                                      stepLength = 2,
                                      stepsPerIteration = 8,
-                                     maxTimePerIteration = 500,
+                                     maxMsecPerIteration = 500,
                                      onStreamlineAdded
                                    }) {
   if (minStartDist < 2 || minStartDist > 254) throw "2 <= minStartDist <= 254 expected";
@@ -58,6 +58,8 @@ function createStreamlineGenerator({
   }, false);
 
   let resolve = null;
+  let isCancelled = false;
+  let isAsync = false;
   let state = STATE_INIT;
   let finishedStreamlineIntegrators = [];
 
@@ -66,43 +68,56 @@ function createStreamlineGenerator({
     minStartDist, maxStartDist, endRatio, stepLength,
   };
   let integrator = new Integrator(seed, startMask, stopMask, icfg);
-  let running = false;
 
   return {
     run,
-    isRunning: () => running,
+    runAsync,
+    cancel,
   };
 
-
   function run() {
-    if (running) return;
-    running = true;
-    setTimeout(() => nextStep(), 0);
-    return new Promise(r => resolve = r);
+    isAsync = false;
+    doWork();
   }
 
-  function nextStep() {
+  async function runAsync() {
+    isAsync = true;
+    setTimeout(() => doWork());
+    return new Promise(r => resolve = r);
+  }
+  
+  function cancel() {
+    isCancelled = true;
+  }
+
+  function doWork() {
+
     let start = window.performance.now();
 
-    for (let i = 0; i < stepsPerIteration; ++i) {
-      if (state === STATE_INIT) initProcessing();
-      if (state === STATE_STREAMLINE) continueStreamline();
-      if (state === STATE_PROCESS_QUEUE) processQueue();
-      if (state === STATE_SEED_STREAMLINE) seedStreamline();
-      if (window.performance.now() - start > maxTimePerIteration) break;
+    for (let i = 0; !isAsync || i < stepsPerIteration; ++i) {
 
-      if (state === STATE_DONE) {
-        resolve();
-        running = false;
+      if (state === STATE_INIT) initProcessing();
+      else if (state === STATE_STREAMLINE) continueStreamline();
+      else if (state === STATE_PROCESS_QUEUE) processQueue();
+      else if (state === STATE_SEED_STREAMLINE) seedStreamline();
+
+      if (isAsync && window.performance.now() - start > maxMsecPerIteration)
+        break;
+
+      if (isCancelled || state === STATE_DONE) {
+        if (isAsync && resolve) resolve();
         return;
       }
     }
-    setTimeout(() => nextStep(), 0);
+
+    if (isAsync) setTimeout(() => doWork());
   }
 
   function initProcessing() {
-    if (!integrator.next())
+    if (!integrator.next()) {
+      state = STATE_DONE;
       return;
+    }
     addStreamLineToQueue();
     state = STATE_PROCESS_QUEUE;
   }

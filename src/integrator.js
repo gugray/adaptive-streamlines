@@ -96,6 +96,7 @@ class Integrator {
         return true;
       }
     }
+    return false;
   }
 
   getNextPoint(forward) {

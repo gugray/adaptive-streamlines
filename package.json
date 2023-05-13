@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/gugray/adaptive-streamlines/issues"
   },
-  "homepage": "https://github.com/gugray/adaptive-streamlines"
+  "homepage": "https://github.com/gugray/adaptive-streamlines",
+  "devDependencies": {
+    "esbuild": "^0.14.21"
+  }
 }
