@@ -1,6 +1,6 @@
-build();
+buildBundle();
 
-async function build() {
+async function buildBundle() {
 
   const esbuild = require("esbuild");
 
