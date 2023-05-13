@@ -26,12 +26,14 @@ jobs:
       - name: Set package version from tag
         run: node build-setver.js ${{github.ref_name}}
       - name: Create release bundle
-        run: node build-bundle.js --ver ${{github.ref_name}}
-#       - name: Create release
-#         uses: softprops/action-gh-release@v1
-#         with:
-#           files: dist/adaptive-streamlines.js
-#       - name: NPM publish
-#         run: npm publish
-#         env:
-#           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+        run: |
+          node build-bundle.js
+          mv dist/adaptive-streamlines.js dist/adaptive-streamlines-${{github.ref_name}}.js
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/adaptive-streamlines-${{github.ref_name}}.js
+      - name: NPM publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
