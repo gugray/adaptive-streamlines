@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>~ adaptive streamlines demo ~</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #282828;
+    }
+    body {
+      display: flex; flex-direction: row; justify-content: center; align-items: flex-start; padding: 20px;
+    }
+    #cnv { max-width: 900px; width: 100%; aspect-ratio: 4/3; background-color: #323232; }
+  </style>
+  <script defer src="app.js" type="module"></script>
+</head>
+<body>
+
+  <canvas id="cnv"></canvas>
+
+  <script>
+    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
+      ':35729/livereload.js?snipver=1"></' + 'script>')
+  </script>
+
+</body>
+</html>

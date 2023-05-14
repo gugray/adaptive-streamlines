@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "adaptive-streamlines": "^0.0.9"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.21",
+    "livereload": "0.9.3",
+    "static-server": "2.2.1"
+  }
+}

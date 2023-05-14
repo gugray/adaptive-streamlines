@@ -22,9 +22,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     ctx2D.lineWidth = 3;
     ctx2D.beginPath();
     for (const pts of flowLines) {
-      ctx2D.moveTo(pts[0].x, h - pts[0].y);
+      ctx2D.moveTo(pts[0].x, pts[0].y);
       for (let i = 1; i < pts.length; ++i) {
-        ctx2D.lineTo(pts[i].x, h - pts[i].y);
+        ctx2D.lineTo(pts[i].x, pts[i].y);
       }
     }
     ctx2D.stroke();

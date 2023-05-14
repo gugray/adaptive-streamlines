@@ -5,5 +5,6 @@ yarn-error.log
 
 node_modules
 dist
-examples/**/public
+examples/**/public/app.js*
+
 
