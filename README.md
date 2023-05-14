@@ -8,7 +8,7 @@ In the original Jobard-Lefer algorithm the density of streamlines is configurabl
 
 ![Portrait of Josephine Baker rendered as a flow field](variable-flowlines-2.jpg)
 
-My focus with this library is not on data visualization but on generative art. Think of explorations like this image, which shows a Perlin noise field that is denser along a ring and lighter in the center and at the edges.
+My focus with this library is not on data visualization but on generative art. Think of explorations like this image, which shows a Perlin noise field that is denser along a ring and sparser in the center and at the edges.
 
 ![Flow field with a mathematical density function](variable-flowlines-1.jpg)
 
