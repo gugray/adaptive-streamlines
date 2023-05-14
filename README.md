@@ -11,3 +11,37 @@ In the original Jobard-Lefer algorithm the density of streamlines is configurabl
 My focus with this library is not on data visualization but on generative art. Think of explorations like this image, which shows a Perlin noise field that is denser along a ring and lighter in the center and at the edges.
 
 ![Flow field with a mathematical density function](variable-flowlines-1.jpg)
+
+## Simple usage
+
+### Using from NPM
+
+If your code has a package.json file, then the simplest way is the add the NPM package as a dependency and import the library as a module, like this:
+
+**package.json**
+```json
+{
+  "dependencies": {
+    "adaptive-streamlines": "^1.0.0"
+  }
+}
+```
+
+**Top of Javascript source file**
+```javascript
+import {createStreamlineGenerator, Vector} from "adaptive-streamlines";
+```
+
+The [field-module](examples/field-module) example illustrates this.
+
+### Including as a script
+
+If you prefer to include the library as a <script> tag in your HTML file, you can download the bundle from the project's [latest release](https://github.com/gugray/adaptive-streamlines/releases) and include it the usual way. The bundle adds its exports to the global `window` object.
+
+```html
+<script defer src="adaptive-streamlines.js" type="module"></script>
+```
+
+The [field-include](examples/field-include) example illustrates this.
+
+  
