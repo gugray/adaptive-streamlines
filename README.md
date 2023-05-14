@@ -79,7 +79,7 @@ const slGen = createStreamlineGenerator({
 await slGen.runAsync();
 ```
 
-### Remarks
+### Details
 
 - The size of the illustrated area is defined by the `width` and `height` parameters. The functions provided through `field` and `density` receive a two-dimensional vector as an argument; the coordinates are 0 <= x < width and 0 <= y < height.
 - There are no strict limits on the width and height you can choose, but in the background the algorithm uses a mask with a unit resolution. I.e., you cannot have streamlines that are closer than 1 to each other. If you use a size that makes sense as a pixel resolution you will be fine.
@@ -90,3 +90,42 @@ await slGen.runAsync();
   - The expected range is 0 < `endRatio` < 1
   - If `endRatio` is close to 1, streamlines are not allowed to get very close to each other. This would correspond to a situation in Jobard-Lefer where _dSep_ is 10 and _dTest_ is 9.
   - If `endRatio` is close to 0, streamlines can get close to each other before they are terminated. This would correspond to a situation in Jobard-Lefer where _dSep_ is 10 and _dTest_ is 3.
+- `minPointsPerLine` is a simple filter. The algorithm will discard streamlines that are shorter than this.
+- `stepLength` is the amount by which streamlines are grown at a time. Streamlines are grown in such a way that the length of their path is (approximately) `stepLength` between consecutive points.
+  - `stepLength` should be less that `minStartDist`.
+- `onStreamlineAdded` gets called every time a new streamline has been fully generated. The function receives an array of points that you can draw immediately, or just collect for later.
+
+### Asynchronous and synchronous usage
+
+Depending on your data, the algorithm can take several seconds to complete. It is definitely too slow to make your page unresponsive if you are developing an interactive application or a website. `runAsync` returns a Promise that you can await or follow up with .then(). If you don't want to wait for the process to complete, you can call `cancel` to terminate it:
+
+```javascript
+import {createStreamlineGenerator, Vector} from "adaptive-streamlines";
+
+// ...
+const slGen = createStreamlineGenerator({...});
+await slGen.runAsync();
+
+// ...
+function onUserClickedStop() {
+  slGen.cancel();
+}
+```
+
+All this can make using _adaptive-streamlines_ a little complicated. If you're working on an illustration locally and don't mind freezing up your browser for a few seconds in exchange for simplicity, you can also call the synchronous, blocking version. You'll still need to provide a callback in `onStreamlineAdded`, however, because the streamline generator itself does not collect the finished streamlines. Your code could look a little like this:
+
+```javascript
+import {createStreamlineGenerator, Vector} from "adaptive-streamlines";
+
+const streamLines = [];
+
+const slGen = createStreamlineGenerator({
+  // ...
+  onStreamlineAdded: points => streamLines.push(points),
+});
+
+slGen.run();
+
+// Now streamLines has all the generated results
+```
+
