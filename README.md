@@ -1,5 +1,9 @@
 # Variable-density streamlines generator
 
+_Working demo [here](https://jealousmarkup.xyz/off/adaptive-streamlines/field-include/),
+[here](https://jealousmarkup.xyz/off/adaptive-streamlines/field-module/)
+and [here](https://jealousmarkup.xyz/off/adaptive-streamlines/photo/)._
+
 This library produces aesthetically pleasing streamline visualizations of flow fields. Think of this like a wind map. We know the wind's direction at every point on a grid, and we want to overlay that data on a map using lines that always follow the wind's direction.
 
 The tricky part in doing this is to create streamlines that are evenly spaced and preferably long. A good method to do this comes from Jobard and Lefer, who published it in their 1997 paper [Creating Evenly-Spaced Streamlines of Arbitrary Density](https://web.cs.ucdavis.edu/~ma/SIGGRAPH02/course23/notes/papers/Jobard.pdf). It was implemented in Javascript by Andrei Kashcha as the [streamlines](https://github.com/anvaka/streamlines) library; my library is derived directly from Andrei's work.
