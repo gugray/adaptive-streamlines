@@ -1,8 +1,11 @@
 # Variable-density streamlines generator
 
-_Working demo [here](https://jealousmarkup.xyz/off/adaptive-streamlines/field-include/),
+_Working demo [here](https://jealousmarkup.xyz/off/adaptive-streamlines/field-include/)
+\[[source](https://github.com/gugray/adaptive-streamlines/tree/main/examples/field-include)\],
 [here](https://jealousmarkup.xyz/off/adaptive-streamlines/field-module/)
-and [here](https://jealousmarkup.xyz/off/adaptive-streamlines/photo/)._
+\[[source](https://github.com/gugray/adaptive-streamlines/tree/main/examples/field-module)\],
+and [here](https://jealousmarkup.xyz/off/adaptive-streamlines/photo/)
+\[[source](https://github.com/gugray/adaptive-streamlines/tree/main/examples/photo)\]._
 
 This library produces aesthetically pleasing streamline visualizations of flow fields. Think of this like a wind map. We know the wind's direction at every point on a grid, and we want to overlay that data on a map using lines that always follow the wind's direction.
 
