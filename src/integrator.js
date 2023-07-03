@@ -102,9 +102,18 @@ class Integrator {
   getNextPoint(forward) {
 
     let dir = this.rk4(this.currPt);
-    if (!dir) return null;
+    if (!dir) {
+      this.startMask.circle(this.currPt, 1);
+      this.stopMask.circle(this.currPt, 1);
+      return null;
+    }
     if (!forward) dir = dir.mulScalar(-1);
     const nextPt = this.currPt.add(dir);
+
+    if (nextPt.x < 0 || nextPt.x >= this.config.width)
+      return null;
+    if (nextPt.y < 0 || nextPt.y >= this.config.height)
+      return null;
 
     // Would get too close to existing streamline
     if (!this.stopMask.isUsable(nextPt.x, nextPt.y)) return null;
