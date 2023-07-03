@@ -2,10 +2,10 @@ import {Vector} from "./vector.js";
 import {Masker} from "./masker.js";
 import {LookupGrid} from "./lookup-grid.js";
 import {Integrator} from "./integrator.js";
+import {shuffle} from "./shuffle.js";
 
 const STATE_INIT = 0;
 const STATE_STREAMLINE = 1;
-const STATE_PROCESS_QUEUE = 2;
 const STATE_DONE = 3;
 const STATE_SEED_STREAMLINE = 4;
 
@@ -21,6 +21,7 @@ function createStreamlineGenerator({
                                      width,
                                      height,
                                      seed,
+                                     rand,
                                      minStartDist = 8,
                                      maxStartDist = 36,
                                      endRatio = 0.4,
@@ -34,12 +35,9 @@ function createStreamlineGenerator({
   if (maxStartDist < 2 || maxStartDist > 254) throw "2 <= maxStartDist <= 254 expected";
   if (endRatio < 0.1 || endRatio >= 1) throw "0.1 <= endRatio < 1 expected";
 
-  if (!seed) {
-    seed = new Vector(
-      Math.random() * width,
-      Math.random() * height
-    );
-  }
+  if (!rand) rand = Math.random;
+
+  if (!seed) seed = new Vector(rand() * width, rand() * height);
 
   const startMask = new Masker({
     width: width,
@@ -98,7 +96,6 @@ function createStreamlineGenerator({
 
       if (state === STATE_INIT) initProcessing();
       else if (state === STATE_STREAMLINE) continueStreamline();
-      else if (state === STATE_PROCESS_QUEUE) processQueue();
       else if (state === STATE_SEED_STREAMLINE) seedStreamline();
 
       if (isAsync && window.performance.now() - start > maxMsecPerIteration)
@@ -119,25 +116,32 @@ function createStreamlineGenerator({
       return;
     }
     addStreamLineToQueue();
-    state = STATE_PROCESS_QUEUE;
+    state = STATE_STREAMLINE;
   }
 
   function seedStreamline() {
-    let currentStreamLine = finishedStreamlineIntegrators[0];
-    let nextSeed = currentStreamLine.getNextValidSeed();
-    if (nextSeed) {
-      integrator = new Integrator(nextSeed, startMask, stopMask, icfg);
-      state = STATE_STREAMLINE;
-    } else {
+    while (finishedStreamlineIntegrators.length > 0) {
+      let currentStreamLine = finishedStreamlineIntegrators[0];
+      let nextSeed = currentStreamLine.getNextValidSeed();
+      if (nextSeed) {
+        integrator = new Integrator(nextSeed, startMask, stopMask, icfg);
+        state = STATE_STREAMLINE;
+        return;
+      }
       finishedStreamlineIntegrators.shift();
-      state = STATE_PROCESS_QUEUE;
+      continue;
     }
-  }
-
-  function processQueue() {
-    if (finishedStreamlineIntegrators.length == 0)
+    // Find new random seed
+    const allFreeCoords = startMask.getFreeCoords();
+    // None left
+    if (allFreeCoords.length == 0) {
       state = STATE_DONE;
-    else state = STATE_SEED_STREAMLINE;
+      return;
+    }
+    shuffle(allFreeCoords, rand);
+    const randomSeed = new Vector(allFreeCoords[0][0], allFreeCoords[0][1]);
+    integrator = new Integrator(randomSeed, startMask, stopMask, icfg);
+    state = STATE_STREAMLINE;
   }
 
   function continueStreamline() {
