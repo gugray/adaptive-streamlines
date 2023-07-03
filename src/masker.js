@@ -32,6 +32,17 @@ class Masker {
     document.body.appendChild(this.elm);
   }
 
+  getFreeCoords() {
+    const res = [];
+    for (let y = 0; y < this.h; ++y) {
+      for (let x = 0; x < this.w; ++x) {
+        if (this.isFree(x, y))
+          res.push([x, y]);
+      }
+    }
+    return res;
+  }
+
   isFree(x, y) {
     x = Math.floor(x);
     y = Math.floor(y);
@@ -51,9 +62,11 @@ class Masker {
     }
   }
 
-  circle(pt, rad) {
-    pt.x = Math.floor(pt.x);
-    pt.y = Math.floor(pt.y);
+  circle(center, rad) {
+    const pt = {
+      x: Math.floor(center.x),
+      y: Math.floor(center.y)
+    }
     rad = Math.round(rad);
     let x = rad - 1;
     let y = 0;
